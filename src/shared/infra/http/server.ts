@@ -1,7 +1,8 @@
-import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
-import cors from "cors";
 import uploadConfig from "@config/upload";
+import cors from "cors";
+import "dotenv/config";
+import express, { NextFunction, Request, Response } from "express";
 
 import AppError from "@shared/errors/AppError";
 

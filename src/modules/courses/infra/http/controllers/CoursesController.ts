@@ -1,6 +1,7 @@
 import CreateCourseService from "@modules/courses/services/CreateCourseService";
 import DeleteCourseService from "@modules/courses/services/DeleteCourseService";
 import ListCoursesService from "@modules/courses/services/ListCoursesService";
+import ListLessonsService from "@modules/courses/services/ListLessonsService";
 import UpdateCourseService from "@modules/courses/services/UpdateCourseService";
 import { Request, Response } from "express";
 
@@ -11,6 +12,19 @@ export default class CoursesController {
     const course = await listCourse.execute();
 
     return response.json(course);
+  }
+
+  public async showLessons(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const { id } = request.params;
+
+    const listLessons = new ListLessonsService();
+
+    const lesson = await listLessons.execute(id);
+
+    return response.json(lesson);
   }
 
   public async create(request: Request, response: Response): Promise<Response> {

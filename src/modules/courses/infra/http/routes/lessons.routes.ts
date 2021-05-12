@@ -7,8 +7,6 @@ import LessonsController from "../controllers/LessonsController";
 const lessonsRouter = Router();
 const lessonsController = new LessonsController();
 
-lessonsRouter.get("/:id/lessons", lessonsController.show);
-
 lessonsRouter.post("/", ensureAuthenticated, lessonsController.create);
 
 lessonsRouter.put("/:id", ensureAuthenticated, lessonsController.update);

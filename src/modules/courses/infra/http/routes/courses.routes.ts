@@ -12,6 +12,8 @@ const coursesController = new CoursesController();
 
 coursesRouter.get("/", coursesController.show);
 
+coursesRouter.get("/:id/lessons", coursesController.showLessons);
+
 coursesRouter.post(
   "/",
   ensureAuthenticated,

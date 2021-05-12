@@ -1,6 +1,7 @@
 import { getRepository } from "typeorm";
 
 import AppError from "@shared/errors/AppError";
+import RedisCacheProvider from "@shared/providers/CacheProvider/RedisCacheProvider";
 
 import Lessons from "../infra/typeorm/entities/Lessons";
 
@@ -21,6 +22,7 @@ class CreateLessonService {
     video_id,
   }: Request): Promise<Lessons> {
     const lessonRepository = getRepository(Lessons);
+    const redisCache = new RedisCacheProvider();
 
     const videoExists = await lessonRepository.findOne({ where: { video_id } });
 
@@ -37,6 +39,8 @@ class CreateLessonService {
     });
 
     await lessonRepository.save(lesson);
+
+    await redisCache.invalidate("courses-list");
 
     return lesson;
   }

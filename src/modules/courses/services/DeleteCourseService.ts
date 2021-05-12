@@ -1,3 +1,6 @@
+import UploadConfig from "@config/upload";
+import fs from "fs";
+import path from "path";
 import { getRepository } from "typeorm";
 
 import AppError from "@shared/errors/AppError";
@@ -13,6 +16,12 @@ class DeleteCourseService {
     if (!course) {
       throw new AppError("This course id doesn't exist.");
     }
+
+    const filePath = path.resolve(UploadConfig.directory, course.image_path);
+
+    fs.unlink(filePath, (err) => {
+      console.log(err);
+    });
 
     await coursesRepository.delete(id);
   }

@@ -1,6 +1,7 @@
 import { getRepository } from "typeorm";
 
 import AppError from "@shared/errors/AppError";
+import RedisCacheProvider from "@shared/providers/CacheProvider/RedisCacheProvider";
 
 import Courses from "../infra/typeorm/entities/Courses";
 
@@ -12,6 +13,7 @@ interface Request {
 class CreateCourseService {
   public async execute({ name, filename }: Request): Promise<Courses> {
     const courseRepository = getRepository(Courses);
+    const redisCache = new RedisCacheProvider();
 
     const nameExists = await courseRepository.findOne({ where: { name } });
 
@@ -25,6 +27,8 @@ class CreateCourseService {
     });
 
     await courseRepository.save(course);
+
+    redisCache.invalidate("courses-list");
 
     return course;
   }

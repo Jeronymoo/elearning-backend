@@ -4,7 +4,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from "typeorm";
+
+import Lessons from "./Lessons";
 
 @Entity("courses")
 class Courses {
@@ -16,6 +19,9 @@ class Courses {
 
   @Column()
   image_path: string;
+
+  @OneToMany(() => Lessons, (lessons) => lessons.course)
+  lessons: Lessons[];
 
   @CreateDateColumn()
   created_at: Date;

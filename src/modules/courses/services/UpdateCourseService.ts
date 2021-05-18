@@ -4,10 +4,11 @@ import path from "path";
 import { getRepository } from "typeorm";
 
 import AppError from "@shared/errors/AppError";
+import RedisCacheProvider from "@shared/providers/CacheProvider/RedisCacheProvider";
 
 import Courses from "../infra/typeorm/entities/Courses";
 
-interface Request {
+interface IRequest {
   course_id: string;
   name: string;
   filename: string;
@@ -18,8 +19,9 @@ class CreateCourseService {
     course_id,
     name,
     filename,
-  }: Request): Promise<Courses> {
+  }: IRequest): Promise<Courses> {
     const courseRepository = getRepository(Courses);
+    const redisCache = RedisCacheProvider.getInstance();
 
     const course = await courseRepository.findOne(course_id);
 
@@ -44,6 +46,8 @@ class CreateCourseService {
 
       course.image_path = filename;
     }
+
+    await redisCache.invalidate("courses-list");
 
     await courseRepository.save(course);
 

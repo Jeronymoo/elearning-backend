@@ -6,8 +6,18 @@ import ICacheProvider from "./models/ICacheProvider";
 export default class RedisCacheProvider implements ICacheProvider {
   private client: RedisClient;
 
-  constructor() {
+  private static INSTANCE: RedisCacheProvider;
+
+  private constructor() {
     this.client = new Redis(cacheConfig.config.redis);
+  }
+
+  public static getInstance(): RedisCacheProvider {
+    if (!RedisCacheProvider.INSTANCE) {
+      RedisCacheProvider.INSTANCE = new RedisCacheProvider();
+    }
+
+    return RedisCacheProvider.INSTANCE;
   }
 
   public async save(key: string, value: any): Promise<void> {

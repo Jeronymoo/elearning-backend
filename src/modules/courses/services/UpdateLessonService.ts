@@ -1,10 +1,11 @@
 import { getRepository } from "typeorm";
 
 import AppError from "@shared/errors/AppError";
+import RedisCacheProvider from "@shared/providers/CacheProvider/RedisCacheProvider";
 
 import Lessons from "../infra/typeorm/entities/Lessons";
 
-interface Request {
+interface IRequest {
   id: string;
   name: string;
   duration: string;
@@ -21,8 +22,9 @@ class CreateLessonService {
     course_id,
     description,
     video_id,
-  }: Request): Promise<Lessons> {
+  }: IRequest): Promise<Lessons> {
     const lessonRepository = getRepository(Lessons);
+    const redisCache = RedisCacheProvider.getInstance();
 
     const lesson = await lessonRepository.findOne({ where: { id } });
 
@@ -35,6 +37,8 @@ class CreateLessonService {
     lesson.course_id = course_id;
     lesson.description = description;
     lesson.video_id = video_id;
+
+    await redisCache.invalidate(`lessons-list-${course_id}`);
 
     await lessonRepository.save(lesson);
 

@@ -7,9 +7,17 @@ import Lessons from "../infra/typeorm/entities/Lessons";
 class ListLessonsService {
   public async execute(course_id: string): Promise<Lessons[]> {
     const lessonsRepository = getRepository(Lessons);
-    const redisCache = new RedisCacheProvider();
+    const redisCache = RedisCacheProvider.getInstance();
 
-    const lessons = await lessonsRepository.find({ where: { course_id } });
+    let lessons = await redisCache.recover(`lessons-list-${course_id}`);
+
+    if (!lessons) {
+      lessons = await lessonsRepository.find({ where: { course_id } });
+
+      await redisCache.save(`lessons-list-${course_id}`, lessons);
+    }
+
+    // const lessons = await lessonsRepository.find({ where: { course_id } });
 
     return lessons;
   }

@@ -5,15 +5,15 @@ import RedisCacheProvider from "@shared/providers/CacheProvider/RedisCacheProvid
 
 import Courses from "../infra/typeorm/entities/Courses";
 
-interface Request {
+interface IRequest {
   name: string;
   filename: string;
 }
 
 class CreateCourseService {
-  public async execute({ name, filename }: Request): Promise<Courses> {
+  public async execute({ name, filename }: IRequest): Promise<Courses> {
     const courseRepository = getRepository(Courses);
-    const redisCache = new RedisCacheProvider();
+    const redisCache = RedisCacheProvider.getInstance();
 
     const nameExists = await courseRepository.findOne({ where: { name } });
 

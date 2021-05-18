@@ -1,0 +1,34 @@
+version: "3.7"
+
+services: 
+  database_elearning:
+    image: postgres
+    container_name: database_elearning
+    restart: always
+    ports: 
+      - 5432:5432
+    environment: 
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=e_learning
+    volumes:
+      - pgdata:/data/postgres
+    network_mode: host
+  redis:
+    image: redis:alpine
+    hostname: redis
+    ports:
+      - 6379:6379
+    network_mode: host
+  app:
+    build: .
+    container_name: elearning
+    ports: 
+      - 3333:3333
+    volumes: 
+      - .:/usr/app
+    network_mode: host
+
+volumes:
+  pgdata:
+    driver: local

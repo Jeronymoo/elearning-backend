@@ -9,7 +9,7 @@ class ListCoursesService {
     const courseRepository = getRepository(Courses);
     const redisCache = RedisCacheProvider.getInstance();
 
-    let courses = await redisCache.recover("courses-list");
+    let courses = await redisCache.recover<Courses[]>("courses-list");
 
     if (!courses) {
       courses = await courseRepository.find({
@@ -18,10 +18,6 @@ class ListCoursesService {
 
       await redisCache.save("courses-list", courses);
     }
-
-    // const courses = await courseRepository.find({
-    //   relations: ["lessons"],
-    // });
 
     return courses;
   }

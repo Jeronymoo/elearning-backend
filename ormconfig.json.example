@@ -1,0 +1,18 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "", // Fill with database username
+  "password": "", // Fill with database password
+  "database": "", // Fill with database name
+  "migrations": [
+    "./src/shared/infra/typeorm/migrations/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "./src/shared/infra/typeorm/migrations"
+  },
+  "entities": [
+    "./src/modules/courses/infra/typeorm/entities/*.ts",
+    "./src/modules/users/infra/typeorm/entities/*.ts"
+  ]
+}

@@ -9,15 +9,15 @@ class ListLessonsService {
     const lessonsRepository = getRepository(Lessons);
     const redisCache = RedisCacheProvider.getInstance();
 
-    let lessons = await redisCache.recover(`lessons-list-${course_id}`);
+    let lessons = await redisCache.recover<Lessons[]>(
+      `lessons-list-${course_id}`
+    );
 
     if (!lessons) {
       lessons = await lessonsRepository.find({ where: { course_id } });
 
       await redisCache.save(`lessons-list-${course_id}`, lessons);
     }
-
-    // const lessons = await lessonsRepository.find({ where: { course_id } });
 
     return lessons;
   }

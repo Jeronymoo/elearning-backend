@@ -6,18 +6,18 @@ import { getRepository } from "typeorm";
 
 import AppError from "@shared/errors/AppError";
 
-interface Response {
+interface IResponse {
   user: User;
   token: string;
 }
 
-interface Request {
-  name: string;
+interface IRequest {
+  email: string;
   password: string;
 }
 
 class AuthenticateUserService {
-  public async execute({ email, password }: Request): Promise<Response> {
+  public async execute({ email, password }: IRequest): Promise<IResponse> {
     const usersRepository = getRepository(User);
 
     const user = await usersRepository.findOne({ where: { email } });

@@ -41,6 +41,7 @@ class CreateLessonService {
     await lessonRepository.save(lesson);
 
     await redisCache.invalidate(`lessons-list-${course_id}`);
+    await redisCache.invalidate("courses-list");
 
     return lesson;
   }

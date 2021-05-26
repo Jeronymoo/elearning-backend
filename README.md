@@ -49,7 +49,7 @@ $ docker run --name elearning-postgres -e POSTGRES_USER=docker \
               -p 5432:5432 -d postgres
 
 # Instalando a imagem do Redis
-$ docker run --name gobarber-redis -p 6379:6379 -d -t redis:alpine
+$ docker run --name elearning-redis -p 6379:6379 -d -t redis:alpine
 
 # Com todos os containers sendo executados faça a criação das tabelas
 $ yarn typeorm migration:run
